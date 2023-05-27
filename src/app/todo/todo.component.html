@@ -1,0 +1,10 @@
+<div *ngIf="todo" [class]="['todo-box', 'todo-container']">
+  <div>
+    {{todo.id}} | <button (click)="updateState(todo.id)">{{todo.state}}</button>{{todo.text}}<button
+      (click)="deleteTodo(todo.id)">X</button>
+  </div>
+</div>
+
+<!-- <div *ngIf="!todo"> -->
+<!--   <h1> "TODO is null" </h1> -->
+<!-- </div> -->
