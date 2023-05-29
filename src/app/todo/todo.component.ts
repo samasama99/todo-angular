@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Todo } from '../todo.service';
-import { Guid } from 'guid-typescript';
+import { Todo, TodoService } from '../todo.service';
 
 @Component({
   selector: 'app-todo',
@@ -8,18 +7,22 @@ import { Guid } from 'guid-typescript';
   styleUrls: ['./todo.component.css']
 })
 export class TodoComponent {
+  constructor(private todoService: TodoService) { }
 
   @Input() todo: Todo | undefined = undefined;
   @Input() index: number = 0;
 
-  @Output() deleteEvent = new EventEmitter<Guid>();
-  @Output() updateStateEvent = new EventEmitter<Guid>();
-
-  deleteTodo(id: Guid) {
-    this.deleteEvent.emit(id);
+  deleteTodo(id: number) {
+    this.todoService.deleteTodo(id).subscribe(_ => {
+      this.todoService.raiseTodosUpdate();
+    });
   }
-  updateState(id: Guid) {
-    this.updateStateEvent.emit(id);
+
+  updateState(id: number) {
+    if (this.todo)
+      this.todoService.updateTodo(id, !this.todo.done).subscribe(_ => {
+        this.todoService.raiseTodosUpdate();
+      });
   }
 
 }

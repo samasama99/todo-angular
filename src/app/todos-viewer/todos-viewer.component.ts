@@ -1,24 +1,26 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Todo } from '../todo.service';
-import { Guid } from 'guid-typescript';
+import { Component, OnDestroy } from '@angular/core';
+import { Todo, TodoService } from '../todo.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-todos-viewer',
   templateUrl: './todos-viewer.component.html',
   styleUrls: ['./todos-viewer.component.css']
 })
-export class TodosViewerComponent {
+export class TodosViewerComponent implements OnDestroy {
+  todos: Todo[] = [];
+  private todosUpdateSubscription: Subscription | undefined;
 
-  @Input() todos: Todo[] = [];
-  @Output() deleteEvent = new EventEmitter<Guid>();
-  @Output() updateStateEvent = new EventEmitter<Guid>();
+  constructor(private todoService: TodoService) { }
 
-  deleteTodo(id: Guid) {
-    this.deleteEvent.emit(id);
+  ngOnInit(): void {
+    this.todosUpdateSubscription = this.todoService.todosUpdate
+      .subscribe(todos => this.todos = todos);
+
+    this.todoService.raiseTodosUpdate();
   }
 
-  updateState(id: Guid) {
-    this.updateStateEvent.emit(id);
+  ngOnDestroy(): void {
+    this.todosUpdateSubscription?.unsubscribe();
   }
-
 }

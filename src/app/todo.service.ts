@@ -1,43 +1,50 @@
-import { Injectable } from '@angular/core';
-import { Guid } from 'guid-typescript';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, OnInit } from '@angular/core';
+import { getTestBed } from '@angular/core/testing';
+import { Observable, Subject } from 'rxjs';
 
 export type Todo = {
-  id: Guid;
+  id: number;
   text: string;
-  state: Boolean;
+  done: Boolean;
 };
 
 @Injectable({
   providedIn: 'root'
 })
 export class TodoService {
-  todos: Todo[] = [
-    { id: this.generateUniqueId(), text: 'todo 1', state: false },
-    { id: this.generateUniqueId(), text: 'todo 2', state: false },
-    { id: this.generateUniqueId(), text: 'todo 3', state: false },
-    { id: this.generateUniqueId(), text: 'todo 4', state: false },
-    { id: this.generateUniqueId(), text: 'todo 5', state: false },
-  ]
 
-  constructor() { }
+  todosUpdate: Subject<Todo[]> = new Subject<Todo[]>();
 
-  private generateUniqueId(): Guid {
-    return Guid.create();
-  }
+  constructor(private httpClient: HttpClient) { }
 
-  getTodos() {
-    return this.todos;
-  }
-
-  addTodo(text: string) {
-    this.todos.push({
-      id: this.generateUniqueId(),
-      text: text,
-      state: false
+  raiseTodosUpdate() {
+    this.getTodos().subscribe(todos => {
+      this.todosUpdate.next(todos);
     })
   }
 
-  deleteTodo(id: Guid) {
-    this.todos = this.todos.filter(todo => todo.id !== id);
+  getTodos(): Observable<Todo[]> {
+    return this.httpClient.get<Todo[]>("http://localhost:3000/task/1");
   }
+
+  addTodo(text: string): Observable<Todo> {
+    return this.httpClient.post<Todo>("http://localhost:3000/task/1", {
+      text: text,
+      done: false
+    });
+  }
+
+  deleteTodo(id: number): Observable<Todo> {
+    return this.httpClient.delete<Todo>("http://localhost:3000/task/" + id);
+  }
+
+  updateTodo(id: number, done: boolean): Observable<Todo> {
+    return this.httpClient.patch<Todo>("http://localhost:3000/task/" + id, null, {
+      params: {
+        'done': done
+      }
+    });
+  }
+
 }
