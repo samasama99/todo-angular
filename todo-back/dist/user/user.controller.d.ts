@@ -7,6 +7,11 @@ export declare class UserController {
     create(createUserDto: CreateUserDto): Promise<import("./entities/user.entity").User>;
     findAll(): Promise<import("./entities/user.entity").User[]>;
     findOne(id: string): Promise<import("./entities/user.entity").User>;
-    update(id: string, updateUserDto: UpdateUserDto): Promise<void>;
+    update(id: string, updateUserDto: UpdateUserDto): Promise<{
+        name: string;
+        id: number;
+        password: string;
+        tasks: import("../task/entities/task.entity").Task[];
+    } & import("./entities/user.entity").User>;
     remove(id: string): Promise<import("./entities/user.entity").User>;
 }

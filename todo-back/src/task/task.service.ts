@@ -9,46 +9,31 @@ import { Task } from './entities/task.entity';
 
 @Injectable()
 export class TaskService {
-    constructor(
-        @InjectRepository(Task)
-        private taskRepository: Repository<Task>,
-        private userService: UserService
-    ) { }
+  constructor(
+    @InjectRepository(Task)
+    private taskRepository: Repository<Task>,
+    private userService: UserService
+  ) { }
 
-    async create(createTaskDto: CreateTaskDto, userId: number) {
-        const user = await this.userService.findOne(userId);
-        const newTodo = this.taskRepository.create({
-            ...createTaskDto,
-            user,
-        });
-        return this.taskRepository.save(newTodo);
-    }
+  async create(createTaskDto: CreateTaskDto, userId: number) {
+    return this.userService.findOne(userId)
+      .then(user => this.taskRepository.create({ ...createTaskDto, user }))
+      .then(newTodo => this.taskRepository.save(newTodo));
+  }
 
-    async update(id: number, updateTaskDto: UpdateTaskDto) {
-        const task = await this.taskRepository.findOne({
-            where: {
-                id: id,
-            },
-        });
-        task.done = updateTaskDto.done;
-        return this.taskRepository.save(task);
-    }
+  async update(id: number, updateTaskDto: UpdateTaskDto) {
+    return this.taskRepository.findOne({ where: { id: id } })
+      .then(task => ({ ...task, done: updateTaskDto.done }))
+      .then(task => this.taskRepository.save(task));
+  }
 
-    async findAll(userId: number) {
-        const user = await this.userService.findOne(userId);
-        console.table(user);
-        console.table(user.tasks);
-        return user.tasks;
-    }
+  async getTodos(userId: number) {
+    return this.userService.findOne(userId).then(user => user.tasks);
+  }
 
-    async remove(id: number) {
-        const task = await this.taskRepository.findOne(
-            {
-                where: {
-                    id: id,
-                },
-            }
-        );
-        return this.taskRepository.remove(task);
-    }
+  async remove(id: number): Promise<number> {
+    return this.taskRepository.findOne({ where: { id: id } })
+      .then(task => this.taskRepository.remove(task))
+      .then(() => id);
+  }
 }

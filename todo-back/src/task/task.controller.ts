@@ -7,26 +7,26 @@ import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 @ApiTags('Task')
 @Controller('task')
 export class TaskController {
-    constructor(private readonly taskService: TaskService) { }
+  constructor(private readonly taskService: TaskService) { }
 
-    @Post(':userId')
-    create(@Param('userId', ParseIntPipe) userId: number, @Body() createTaskDto: CreateTaskDto) {
-        return this.taskService.create(createTaskDto, userId);
-    }
+  @Post(':userId')
+  create(@Param('userId', ParseIntPipe) userId: number, @Body() createTaskDto: CreateTaskDto) {
+    return this.taskService.create(createTaskDto, userId);
+  }
 
-    @Get(':userId')
-    findAll(@Param('userId', ParseIntPipe) userId: number) {
-        return this.taskService.findAll(userId);
-    }
+  @Get(':userId')
+  getTodos(@Param('userId', ParseIntPipe) userId: number) {
+    return this.taskService.getTodos(userId);
+  }
 
-    @Patch(':id')
-    @ApiQuery({ name: 'done' })
-    update(@Param('id') id: string, @Query('done', ParseBoolPipe) done: boolean) {
-        return this.taskService.update(+id, { done: done });
-    }
+  @Patch(':id')
+  @ApiQuery({ name: 'done' })
+  update(@Param('id') id: string, @Query('done', ParseBoolPipe) done: boolean) {
+    return this.taskService.update(+id, { done: done });
+  }
 
-    @Delete(':id')
-    remove(@Param('id') id: string) {
-        return this.taskService.remove(+id);
-    }
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.taskService.remove(+id);
+  }
 }

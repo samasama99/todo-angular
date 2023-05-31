@@ -24,35 +24,22 @@ let TaskService = class TaskService {
         this.userService = userService;
     }
     async create(createTaskDto, userId) {
-        const user = await this.userService.findOne(userId);
-        const newTodo = this.taskRepository.create({
-            ...createTaskDto,
-            user,
-        });
-        return this.taskRepository.save(newTodo);
+        return this.userService.findOne(userId)
+            .then(user => this.taskRepository.create({ ...createTaskDto, user }))
+            .then(newTodo => this.taskRepository.save(newTodo));
     }
     async update(id, updateTaskDto) {
-        const task = await this.taskRepository.findOne({
-            where: {
-                id: id,
-            },
-        });
-        task.done = updateTaskDto.done;
-        return this.taskRepository.save(task);
+        return this.taskRepository.findOne({ where: { id: id } })
+            .then(task => ({ ...task, done: updateTaskDto.done }))
+            .then(task => this.taskRepository.save(task));
     }
-    async findAll(userId) {
-        const user = await this.userService.findOne(userId);
-        console.table(user);
-        console.table(user.tasks);
-        return user.tasks;
+    async getTodos(userId) {
+        return this.userService.findOne(userId).then(user => user.tasks);
     }
     async remove(id) {
-        const task = await this.taskRepository.findOne({
-            where: {
-                id: id,
-            },
-        });
-        return this.taskRepository.remove(task);
+        return this.taskRepository.findOne({ where: { id: id } })
+            .then(task => this.taskRepository.remove(task))
+            .then(() => id);
     }
 };
 TaskService = __decorate([

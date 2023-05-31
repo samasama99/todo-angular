@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
-import { getTestBed } from '@angular/core/testing';
-import { Observable, Subject } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 export type Todo = {
   id: number;
@@ -13,37 +12,40 @@ export type Todo = {
   providedIn: 'root'
 })
 export class TodoService {
-
-  todosUpdate: Subject<Todo[]> = new Subject<Todo[]>();
-
-  constructor(private httpClient: HttpClient) { }
-
-  raiseTodosUpdate() {
-    this.getTodos().subscribe(todos => {
-      this.todosUpdate.next(todos);
-    })
-  }
+  private httpClient = inject(HttpClient);
+  private todos$ = new BehaviorSubject<Todo[]>([]);
 
   getTodos(): Observable<Todo[]> {
-    return this.httpClient.get<Todo[]>("http://localhost:3000/task/1");
+    this.httpClient.get<Todo[]>("http://localhost:3000/task/1").subscribe((todos) => {
+      this.todos$.next(todos);
+    });
+    return this.todos$.asObservable();
   }
 
-  addTodo(text: string): Observable<Todo> {
-    return this.httpClient.post<Todo>("http://localhost:3000/task/1", {
+  addTodo(text: string) {
+    this.httpClient.post<Todo>("http://localhost:3000/task/1", {
       text: text,
       done: false
+    }).subscribe((todo) => {
+      this.todos$.next([...this.todos$.value, todo]);
     });
   }
 
-  deleteTodo(id: number): Observable<Todo> {
-    return this.httpClient.delete<Todo>("http://localhost:3000/task/" + id);
+  deleteTodo(id: number) {
+    this.httpClient.delete<number>("http://localhost:3000/task/" + id).subscribe((id: number) => {
+      this.todos$.next([...this.todos$.value.filter(todo => todo.id !== id)])
+    });
   }
 
-  updateTodo(id: number, done: boolean): Observable<Todo> {
-    return this.httpClient.patch<Todo>("http://localhost:3000/task/" + id, null, {
+  updateTodo(id: number, done: boolean) {
+    this.httpClient.patch<Todo>("http://localhost:3000/task/" + id, null, {
       params: {
         'done': done
       }
+    }).subscribe((updatedTodo) => {
+      const todo = this.todos$.value.find(todo => todo.id == updatedTodo.id);
+      if (todo)
+        todo.done = updatedTodo.done;
     });
   }
 

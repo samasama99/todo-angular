@@ -13,16 +13,12 @@ export class TodoComponent {
   @Input() index: number = 0;
 
   deleteTodo(id: number) {
-    this.todoService.deleteTodo(id).subscribe(_ => {
-      this.todoService.raiseTodosUpdate();
-    });
+    this.todoService.deleteTodo(id);
   }
 
   updateState(id: number) {
     if (this.todo)
-      this.todoService.updateTodo(id, !this.todo.done).subscribe(_ => {
-        this.todoService.raiseTodosUpdate();
-      });
+      this.todoService.updateTodo(id, !this.todo.done);
   }
 
 }

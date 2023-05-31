@@ -24,8 +24,8 @@ let TaskController = class TaskController {
     create(userId, createTaskDto) {
         return this.taskService.create(createTaskDto, userId);
     }
-    findAll(userId) {
-        return this.taskService.findAll(userId);
+    getTodos(userId) {
+        return this.taskService.getTodos(userId);
     }
     update(id, done) {
         return this.taskService.update(+id, { done: done });
@@ -48,7 +48,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", void 0)
-], TaskController.prototype, "findAll", null);
+], TaskController.prototype, "getTodos", null);
 __decorate([
     (0, common_1.Patch)(':id'),
     (0, swagger_1.ApiQuery)({ name: 'done' }),

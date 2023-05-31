@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, inject } from '@angular/core';
 import { TodoService } from '../todo.service';
 
 @Component({
@@ -7,11 +7,9 @@ import { TodoService } from '../todo.service';
   styleUrls: ['./new-todo.component.css']
 })
 export class NewTodoComponent {
-  constructor(private todoService: TodoService) { }
+  private todoService = inject(TodoService);
 
   addTodo(text: string) {
-    this.todoService.addTodo(text).subscribe(_ => {
-      this.todoService.raiseTodosUpdate();
-    });
+    this.todoService.addTodo(text);
   }
 }

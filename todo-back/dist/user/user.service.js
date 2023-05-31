@@ -39,20 +39,18 @@ let UserService = class UserService {
         });
     }
     async update(id, updateUserDto) {
-        let user = await this.findOne(id);
-        user.name = updateUserDto.name;
-        this.userRepository.save(user);
+        return await this.findOne(id)
+            .then(user => ({ ...user, name: updateUserDto.name }))
+            .then(user => this.userRepository.save(user));
     }
     async remove(id) {
-        const user = await this.userRepository.findOneOrFail({
-            where: {
-                id: id,
-            },
+        return this.userRepository.findOneOrFail({
+            where: { id: id },
             relations: ['tasks'],
+        }).then(user => {
+            user.tasks.map(task => this.taskRepository.remove(task));
+            return this.userRepository.remove(user);
         });
-        ;
-        user.tasks.map(task => this.taskRepository.remove(task));
-        return await this.userRepository.remove(user);
     }
 };
 UserService = __decorate([

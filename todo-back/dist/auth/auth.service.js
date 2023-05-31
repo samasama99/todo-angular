@@ -20,15 +20,17 @@ let AuthService = class AuthService {
     }
     ;
     async validateUser(username, password) {
-        const users = await this.userService.findAll();
-        const user = users.find(user => user.name == username);
-        if (!user)
-            throw new common_1.NotFoundException();
-        if (user.password == password) {
-            const { password, ...rest } = user;
-            return rest;
-        }
-        return null;
+        return this.userService.findAll()
+            .then(users => users.find(user => user.name == username))
+            .then(user => {
+            if (!user)
+                throw new common_1.NotFoundException();
+            if (user.password == password) {
+                const { password, ...rest } = user;
+                return rest;
+            }
+            return null;
+        });
     }
     async login(user) {
         const payload = { name: user.name, sub: user.id };

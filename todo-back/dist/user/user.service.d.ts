@@ -10,6 +10,11 @@ export declare class UserService {
     create(createUserDto: CreateUserDto): Promise<User>;
     findAll(): Promise<User[]>;
     findOne(id: number): Promise<User>;
-    update(id: number, updateUserDto: UpdateUserDto): Promise<void>;
+    update(id: number, updateUserDto: UpdateUserDto): Promise<{
+        name: string;
+        id: number;
+        password: string;
+        tasks: Task[];
+    } & User>;
     remove(id: number): Promise<User>;
 }
