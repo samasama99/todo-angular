@@ -3,12 +3,15 @@
 # Compiled output
 /dist
 /dist/*
+/todo-back/dist
+/todo-back/dist/*
 /tmp
 /out-tsc
 /bazel-out
 
 # Node
 /node_modules
+/todo-back/node_modules
 npm-debug.log
 yarn-error.log
 
