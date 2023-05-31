@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { AuthService } from './auth.service';
 
 export type Todo = {
   id: number;
@@ -15,8 +16,10 @@ export class TodoService {
   private httpClient = inject(HttpClient);
   private todos$ = new BehaviorSubject<Todo[]>([]);
 
+  private authService = inject(AuthService);
+
   getTodos(): Observable<Todo[]> {
-    this.httpClient.get<Todo[]>("http://localhost:3000/task/1").subscribe((todos) => {
+    this.httpClient.get<Todo[]>("http://localhost:3000/task/" + this.authService.user.id).subscribe((todos) => {
       this.todos$.next(todos);
     });
     return this.todos$.asObservable();

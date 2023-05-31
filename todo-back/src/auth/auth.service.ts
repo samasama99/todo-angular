@@ -29,6 +29,8 @@ export class AuthService {
 
     return {
       access_token: this.jwtService.sign(payload, { secret: `${process.env.JWT_KEY}` }),
+      name: payload.name,
+      id: payload.sub
     }
   }
 }

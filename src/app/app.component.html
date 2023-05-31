@@ -1,4 +1,8 @@
 <h1>TODO:</h1>
-
-<app-new-todo></app-new-todo>
-<app-todos-viewer></app-todos-viewer>
+<div *ngIf="is_logged()">
+  <app-new-todo></app-new-todo>
+  <app-todos-viewer></app-todos-viewer>
+</div>
+<div *ngIf="!is_logged()">
+  <app-login></app-login>
+</div>
