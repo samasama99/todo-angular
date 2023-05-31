@@ -21,4 +21,21 @@ export class TodoComponent {
       this.todoService.updateTodo(id, !this.todo.done);
   }
 
+  getTimeElapsed(todo: Todo): string {
+    const createdAt = new Date(todo.createdAt); // Assuming createdAt is a valid date string in your Todo model
+    const now = new Date();
+    const timeDiff = now.getTime() - createdAt.getTime();
+    const hoursDiff = Math.floor(timeDiff / (1000 * 3600));
+    const daysDiff = Math.floor(hoursDiff / 24);
+
+    if (daysDiff === 0) {
+      return 'today';
+    }
+    else if (daysDiff > 0) {
+      return `${daysDiff} days ago`;
+    } else {
+      return `${hoursDiff} hours ago`;
+    }
+  }
+
 }

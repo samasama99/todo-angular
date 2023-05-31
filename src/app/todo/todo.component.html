@@ -1,10 +1,16 @@
-<div *ngIf="todo" [class]="['todo-box', 'todo-container']">
-  <div>
-    {{todo.id}} | <button (click)="updateState(todo.id)">{{todo.done}}</button>{{todo.text}}<button
-      (click)="deleteTodo(todo.id)">X</button>
+<div class="card text-white {{ !todo.done ? 'bg-success' : 'bg-secondary'}} mb-1" style="; width: 30rem" *ngIf="todo">
+  <div class="card-body">
+    <div class="row">
+      <div class="col">
+        <small>id: {{todo.id}} ; created at: {{getTimeElapsed(todo)}}</small>
+        <p style="font-size: 25px;" class="card-text">{{todo.text}}</p>
+      </div>
+      <div class="col-auto">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
+          (click)="deleteTodo(todo.id)">
+          <span aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
   </div>
 </div>
-
-<!-- <div *ngIf="!todo"> -->
-<!--   <h1> "TODO is null" </h1> -->
-<!-- </div> -->

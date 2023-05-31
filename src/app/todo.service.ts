@@ -7,6 +7,7 @@ export type Todo = {
   id: number;
   text: string;
   done: Boolean;
+  createdAt: Date;
 };
 
 @Injectable({

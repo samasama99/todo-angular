@@ -1,6 +1,7 @@
 import { Component, OnDestroy, inject } from '@angular/core';
 import { Todo, TodoService } from '../todo.service';
 import { Observable, Subscription } from 'rxjs';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-todos-viewer',
@@ -13,7 +14,10 @@ export class TodosViewerComponent {
   private todoService = inject(TodoService);
 
   ngOnInit(): void {
-    this.todos$ = this.todoService.getTodos();
+    // this.todos$ = this.todoService.getTodos();
+    this.todos$ = this.todoService
+      .getTodos()
+      .pipe(map(todos => todos.sort((c, n) => n.id - c.id)));
     // this.todosUpdateSubscription = this.todoService.todos$
     //   .subscribe(todos => this.todos = todos);
 

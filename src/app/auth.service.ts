@@ -30,6 +30,7 @@ export class AuthService {
   }
 
   logging(user: LogObj) {
+    console.log('login wiht', user);
     return this.httpClient.post<any>('http://localhost:3000/login', {
       'username': user.username,
       'password': user.password

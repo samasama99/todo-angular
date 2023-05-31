@@ -1,12 +1,13 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, ParseIntPipe, ParseBoolPipe, Query, UseGuards } from '@nestjs/common';
 import { TaskService } from './task.service';
 import { CreateTaskDto } from './dto/create-task.dto';
-import { ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiQuery, ApiTags } from '@nestjs/swagger';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 
 
 @ApiTags('Task')
 @Controller('task')
+@ApiBearerAuth()
 export class TaskController {
   constructor(private readonly taskService: TaskService) { }
 
