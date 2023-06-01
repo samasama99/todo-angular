@@ -1,5 +1,6 @@
 import { HttpClient, } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
+import { EnvService } from './env.service';
 
 
 export type User = {
@@ -19,6 +20,9 @@ export class AuthService {
   is_logged() {
     return this.logged;
   }
+
+  private envService = inject(EnvService);
+  private url_base = this.envService.apiUrl;
   user: User = { name: '', id: 0 };
   logged: boolean = false;
   jwt: string = "";
@@ -31,7 +35,7 @@ export class AuthService {
 
   logging(user: LogObj) {
     console.log('login wiht', user);
-    return this.httpClient.post<any>('http://localhost:3000/login', {
+    return this.httpClient.post<any>(this.url_base + '/login', {
       'username': user.username,
       'password': user.password
     })

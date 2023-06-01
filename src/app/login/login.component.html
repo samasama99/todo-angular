@@ -1,5 +1,5 @@
-<p>please log</p>
-
-<input #username placeholder="Enter UserName">
-<input #password placeholder="Enter Password">
-<button (click)="logging(username.value, password.value)">Log</button>
+<div class="form-group">
+  <input #username placeholder="Enter UserName" type="text" class="form-control" id="inputDefault">
+  <input #password placeholder="Enter Password" type="text" class="form-control" id="inputDefault">
+  <button (click)="logging(username.value, password.value)" type="button" class="btn btn-primary">Log</button>
+</div>
