@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { AuthService } from './auth.service';
+import { Store } from '@ngrx/store';
+import { selectIsLoggedIn, selectUser } from './auth-state/auth.selectors';
 
 @Component({
   selector: 'app-root',
@@ -8,13 +9,10 @@ import { AuthService } from './auth.service';
 })
 export class AppComponent implements OnInit {
 
-  authService = inject(AuthService);
+  store = inject(Store);
   title = 'todo';
+  logged$ = this.store.select(selectIsLoggedIn);
   // logged = false;
-  is_logged() {
-    return this.authService.is_logged();
-  }
-
   ngOnInit(): void {
     // this.authService.login({ username: 'ouss', password: 'pass' });
   }

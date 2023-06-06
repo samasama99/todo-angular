@@ -12,15 +12,14 @@
 <!-- </div> -->
 
 <div class="container">
-
   <br>
   <br>
   <h1>TODO:</h1>
   <br>
-  <div *ngIf="is_logged()">
+  <div *ngIf="logged$ | async">
     <app-todos-viewer></app-todos-viewer>
   </div>
-  <div *ngIf="!is_logged()">
+  <div *ngIf="!(logged$ | async)">
     <app-login></app-login>
   </div>
 </div>

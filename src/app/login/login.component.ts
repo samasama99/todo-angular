@@ -9,7 +9,7 @@ import { AuthService } from '../auth.service';
 export class LoginComponent {
   private authService = inject(AuthService);
 
-  logging(username: string, password: string) {
-    this.authService.login({ username, password });
+  login(username: string, password: string) {
+    this.authService.login({ username, password }).subscribe();
   }
 }
