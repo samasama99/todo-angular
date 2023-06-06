@@ -10,6 +10,6 @@ export class LoginComponent {
   private authService = inject(AuthService);
 
   logging(username: string, password: string) {
-    this.authService.logging({ username, password });
+    this.authService.login({ username, password });
   }
 }

@@ -16,7 +16,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.authService.logging({ username: 'ouss', password: 'pass' });
+    // this.authService.login({ username: 'ouss', password: 'pass' });
   }
 
 }

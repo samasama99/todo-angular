@@ -36,8 +36,8 @@ export class AuthService {
     return this.jwt;
   }
 
-  logging(user: LogObj) {
-    console.log('login wiht', user);
+  login(user: LogObj) {
+    console.log('login with', user);
     return this.httpClient.post<any>(this.url_base + '/login', {
       'username': user.username,
       'password': user.password
@@ -48,6 +48,6 @@ export class AuthService {
         this.user.name = res.name;
         this.user.id = res.id;
         this.store.dispatch(loadTodos());
-      });
+      }, (err) => console.table(err));
   }
 }

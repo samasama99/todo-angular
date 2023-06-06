@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { TodoComponent } from './todo/todo.component';
 import { NewTodoComponent } from './new-todo/new-todo.component';
 import { TodosViewerComponent } from './todos-viewer/todos-viewer.component';
-import { MyInterceptor } from './http-interceptors/auth-interceptor';
+import { AuthInterceptor } from './http-interceptors/auth-interceptor';
 import { AuthService } from './auth.service';
 import { LoginComponent } from './login/login.component';
 import { StoreModule } from '@ngrx/store';
@@ -38,7 +38,7 @@ import { TodoEffects } from './todo-state/todo.effects';
     EffectsModule.forRoot([TodoEffects]), // Register the TodoEffects
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
     AuthService,
   ],
   bootstrap: [AppComponent]
