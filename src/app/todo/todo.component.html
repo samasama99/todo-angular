@@ -1,15 +1,14 @@
-<div *ngIf="todo" class="card text-white {{ !todo.done ? 'bg-success' : 'bg-secondary'}} mb-1" style="width: 30rem"
-  (click)="updateState(todo.id)">
-  <div class="card-body" (click)="updateState(todo.id)">
+<div *ngIf="todo" class="card text-white {{ !todo.done ? 'bg-success' : 'bg-secondary'}} mb-1" style="width: 30rem">
+  <div class="card-body" (click)="updateState()">
     <div class="row">
       <div class="col">
-        <small>id: {{todo.id}} ; created at: {{getTimeElapsed(todo)}}</small>
+        <small>id: {{todo.id ?? -1}} ; created at: {{getTimeElapsed(todo)}}</small>
         <p style="font-size: 25px; {{todo.done ? 'text-decoration: line-through;' : '' }}" class="card-text">
           {{todo.text}}</p>
       </div>
       <div class="col-auto">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"
-          (click)="deleteTodo(todo.id)">
+          (click)="deleteTodo(todo.id ?? -1)">
           <span aria-hidden="true"></span>
         </button>
       </div>

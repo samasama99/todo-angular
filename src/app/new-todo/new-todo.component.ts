@@ -1,15 +1,15 @@
-import { Component, EventEmitter, Output, inject } from '@angular/core';
-import { TodoService } from '../todo.service';
+import { ChangeDetectionStrategy, Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-new-todo',
   templateUrl: './new-todo.component.html',
-  styleUrls: ['./new-todo.component.css']
+  styleUrls: ['./new-todo.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class NewTodoComponent {
-  private todoService = inject(TodoService);
+  @Output() addTodoEmitter = new EventEmitter<string>();
 
   addTodo(text: string) {
-    this.todoService.addTodo(text);
+    this.addTodoEmitter.emit(text);
   }
 }

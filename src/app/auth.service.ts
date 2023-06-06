@@ -1,6 +1,8 @@
 import { HttpClient, } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import { EnvService } from './env.service';
+import { Store } from '@ngrx/store';
+import { loadTodos } from './todo-state/todo.actions';
 
 
 export type User = {
@@ -22,6 +24,7 @@ export class AuthService {
   }
 
   private envService = inject(EnvService);
+  private store = inject(Store);
   private url_base = this.envService.apiUrl;
   user: User = { name: '', id: 0 };
   logged: boolean = false;
@@ -44,6 +47,7 @@ export class AuthService {
         this.jwt = res.access_token;
         this.user.name = res.name;
         this.user.id = res.id;
+        this.store.dispatch(loadTodos());
       });
   }
 }

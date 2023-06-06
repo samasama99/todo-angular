@@ -18,17 +18,36 @@ export class TaskService {
   async create(createTaskDto: CreateTaskDto, userId: number) {
     return this.userService.findOne(userId)
       .then(user => this.taskRepository.create({ ...createTaskDto, user }))
-      .then(newTodo => this.taskRepository.save(newTodo));
+      .then(newTodo => this.taskRepository.save(newTodo))
+      .then(task => {
+        const { user, ...taskWithoutUser } = task;
+        return taskWithoutUser;
+      });
   }
 
   async update(id: number, updateTaskDto: UpdateTaskDto) {
-    return this.taskRepository.findOne({ where: { id: id } })
+    return this.taskRepository
+      .findOne({ where: { id: id }, select: ['id', 'text', 'done', 'createdAt'] })
       .then(task => ({ ...task, done: updateTaskDto.done }))
-      .then(task => this.taskRepository.save(task));
+      .then(task => this.taskRepository.save(task))
+      .then(task => {
+        const { user, ...taskWithoutUser } = task;
+        return taskWithoutUser;
+      });
   }
 
   async getTodos(userId: number) {
-    return this.userService.findOne(userId).then(user => user.tasks);
+    return this.taskRepository.find({
+      where: {
+        user: {
+          id: userId
+        }
+      }, select:
+        ['id', 'text', 'done', 'createdAt']
+    });
+    return this.userService
+      .findOne(userId)
+      .then(user => user.tasks);
   }
 
   async remove(id: number): Promise<number> {

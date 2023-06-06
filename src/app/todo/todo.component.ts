@@ -1,28 +1,27 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { Todo, TodoService } from '../todo.service';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from "@angular/core";
+import { Todo } from "../todo-state/todo.model";
 
 @Component({
   selector: 'app-todo',
   templateUrl: './todo.component.html',
-  styleUrls: ['./todo.component.css']
+  styleUrls: ['./todo.component.css'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TodoComponent {
-  constructor(private todoService: TodoService) { }
-
   @Input() todo: Todo | undefined = undefined;
-  @Input() index: number = 0;
+  @Output() deleteTodoEmitter = new EventEmitter<number>();
+  @Output() updateTodoStateEmitter = new EventEmitter<Todo>();
 
   deleteTodo(id: number) {
-    this.todoService.deleteTodo(id);
+    this.deleteTodoEmitter.emit(id);
   }
 
-  updateState(id: number) {
-    if (this.todo)
-      this.todoService.updateTodo(id, !this.todo.done);
+  updateState() {
+    this.updateTodoStateEmitter.emit(this.todo);
   }
 
   getTimeElapsed(todo: Todo): string {
-    const createdAt = new Date(todo.createdAt); // Assuming createdAt is a valid date string in your Todo model
+    const createdAt = new Date(todo.createdAt ?? Date.now()); // Assuming createdAt is a valid date string in your Todo model
     const now = new Date();
     const timeDiff = now.getTime() - createdAt.getTime();
     const hoursDiff = Math.floor(timeDiff / (1000 * 3600));

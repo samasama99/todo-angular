@@ -18,10 +18,6 @@
   <h1>TODO:</h1>
   <br>
   <div *ngIf="is_logged()">
-    <div class="jumbotron">
-      <app-new-todo></app-new-todo>
-    </div>
-    <br>
     <app-todos-viewer></app-todos-viewer>
   </div>
   <div *ngIf="!is_logged()">

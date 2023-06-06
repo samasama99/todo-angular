@@ -24,9 +24,7 @@ export class UserService {
 
   findOne(id: number): Promise<User> {
     return this.userRepository.findOneOrFail({
-      where: {
-        id: id,
-      },
+      where: { id: id },
       relations: ['tasks'],
     });
   }
@@ -34,7 +32,7 @@ export class UserService {
   async update(id: number, updateUserDto: UpdateUserDto) {
     return await this.findOne(id)
       .then(user => ({ ...user, name: updateUserDto.name }))
-      .then(user => this.userRepository.save(user));
+      .then(user => this.userRepository.save(user))
   }
 
   async remove(id: number) {

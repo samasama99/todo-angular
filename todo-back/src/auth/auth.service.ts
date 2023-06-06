@@ -8,6 +8,11 @@ export class AuthService {
   constructor(private userService: UserService, private jwtService: JwtService) { };
 
   async validateUser(username: string, password: string): Promise<any> {
+    console.log(
+      username,
+      password,
+      await (this.userService.findAll().then(users => users.find(user => user.name == username)))
+    )
     return this.userService.findAll()
       .then(users => users.find(user => user.name == username))
       .then(user => {
